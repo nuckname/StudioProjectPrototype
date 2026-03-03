@@ -29,6 +29,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform wallCheck;
     [SerializeField] private LayerMask wallLayer;
 
+    
+    [Header("Gravity Settings")]
+    [Tooltip("Higher = falls faster, Lower = falls slower")]
+    [SerializeField] private float gravityScale = 3f; 
     private void Update()
     {
         //They are reverse for some reason, so I added negative 
@@ -55,6 +59,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Vector3 gravity = Physics.gravity.y * (gravityScale - 1) * Vector3.up;
+        rb.AddForce(gravity, ForceMode.Acceleration);
+        
         if (!isWallJumping)
         {
             rb.linearVelocity = new Vector3(horizontal * speed, rb.linearVelocity.y, rb.linearVelocity.z);
