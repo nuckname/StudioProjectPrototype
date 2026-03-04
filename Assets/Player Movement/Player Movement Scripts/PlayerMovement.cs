@@ -216,4 +216,43 @@ public class PlayerMovement : MonoBehaviour
         isFacingRight = !isFacingRight;
         transform.Rotate(0f, 180f, 0f);
     }
+
+    //AI
+    // --- NEW OnGUI METHOD ---
+    private void OnGUI()
+    {
+        // Only show the floating text if the player is currently penalized/slowed
+        if (penaltyTimer > 0f)
+        {
+            Camera cam = Camera.main;
+            if (cam != null)
+            {
+                // Set the position slightly above the player (adjust Vector3.up * X to change height)
+                Vector3 worldPos = transform.position + (Vector3.up * 1.5f);
+                
+                // Convert 3D world position to 2D screen position
+                Vector3 screenPos = cam.WorldToScreenPoint(worldPos);
+
+                // Make sure the player is in front of the camera (z > 0)
+                if (screenPos.z > 0)
+                {
+                    // Invert the Y-axis because GUI coordinates start from top-left, while screen coordinates start from bottom-left
+                    float guiY = Screen.height - screenPos.y;
+
+                    // Center the rect over the player
+                    Rect labelRect = new Rect(screenPos.x - 50f, guiY, 100f, 30f);
+
+                    // Create a styling for the text
+                    GUIStyle style = new GUIStyle();
+                    style.normal.textColor = Color.red;        // Make it red
+                    style.fontSize = 24;                       // Adjust size
+                    style.fontStyle = FontStyle.Bold;          // Make it bold
+                    style.alignment = TextAnchor.MiddleCenter; // Center the text within the Rect
+
+                    // Draw the text
+                    GUI.Label(labelRect, "Slowed!", style);
+                }
+            }
+        }
+    }
 }
