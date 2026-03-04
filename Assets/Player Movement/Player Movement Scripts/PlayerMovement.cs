@@ -38,11 +38,19 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Fall Detection")]
     [SerializeField] private float fallThreshold = 15f;
+    [SerializeField] private float fallPenaltyDuration = 2f; 
     private float highestYPos;
     private bool hasTriggeredFallLog;
+    private float penaltyTimer;
 
     private void Update()
     {
+        // Handle the penalty timer countdown
+        if (penaltyTimer > 0f)
+        {
+            penaltyTimer -= Time.deltaTime;
+        }
+
         horizontal = -Input.GetAxisRaw("Horizontal");
         
         isSliding = Input.GetKey(KeyCode.LeftControl) && IsGrounded();
@@ -64,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
 
         WallSlide();
         WallJump();
-        CheckFallDistance(); // <-- Added Fall Detection check here
+        CheckFallDistance(); 
 
         if (!isWallJumping && !isSliding) 
         {
@@ -80,14 +88,17 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(gravity, ForceMode.Acceleration);
         }
 
+        // Determine if speed should be halved
+        float currentSpeedMultiplier = penaltyTimer > 0f ? 0.5f : 1f;
+
         //can only do 1 of these at a time
         if (isSliding)
         {
-            ApplySlopeSlide();
+            ApplySlopeSlide(currentSpeedMultiplier);
         }
         else if (!isWallJumping)
         {
-            rb.linearVelocity = new Vector3(horizontal * speed, rb.linearVelocity.y, rb.linearVelocity.z);
+            rb.linearVelocity = new Vector3(horizontal * speed * currentSpeedMultiplier, rb.linearVelocity.y, rb.linearVelocity.z);
         }
     }
 
@@ -106,6 +117,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 Debug.Log("fallen too far");
                 
+                // Trigger the 2-second speed penalty
+                penaltyTimer = fallPenaltyDuration; 
+
                 //only display once
                 hasTriggeredFallLog = true; 
             }
@@ -119,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     //Youtube reference: https://www.youtube.com/watch?v=SsckrYYxcuM&t=138s
-    private void ApplySlopeSlide()
+    private void ApplySlopeSlide(float speedMultiplier)
     {
         if (Physics.Raycast(groundCheck.position, Vector3.down, out RaycastHit hit, 1f, groundLayer))
         {
@@ -132,7 +146,8 @@ public class PlayerMovement : MonoBehaviour
                 slopeDirection = new Vector3(isFacingRight ? 1f : -1f, 0f, 0f);
             }
 
-            float currentSlideSpeed = baseSlideSpeed + (slopeAngle * slopeSpeedMultiplier);
+            // Apply the speed multiplier here as well so sliding is also penalized
+            float currentSlideSpeed = (baseSlideSpeed + (slopeAngle * slopeSpeedMultiplier)) * speedMultiplier;
 
             rb.linearVelocity = new Vector3(slopeDirection.x * currentSlideSpeed, slopeDirection.y * currentSlideSpeed, rb.linearVelocity.z);
         }
