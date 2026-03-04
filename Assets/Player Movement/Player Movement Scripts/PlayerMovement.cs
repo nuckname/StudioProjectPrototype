@@ -36,6 +36,11 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("Higher = falls faster")]
     [SerializeField] private float gravityScale = 3f; 
 
+    [Header("Fall Detection")]
+    [SerializeField] private float fallThreshold = 15f;
+    private float highestYPos;
+    private bool hasTriggeredFallLog;
+
     private void Update()
     {
         horizontal = -Input.GetAxisRaw("Horizontal");
@@ -59,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
 
         WallSlide();
         WallJump();
+        CheckFallDistance(); // <-- Added Fall Detection check here
 
         if (!isWallJumping && !isSliding) 
         {
@@ -82,6 +88,33 @@ public class PlayerMovement : MonoBehaviour
         else if (!isWallJumping)
         {
             rb.linearVelocity = new Vector3(horizontal * speed, rb.linearVelocity.y, rb.linearVelocity.z);
+        }
+    }
+
+    private void CheckFallDistance()
+    {
+        if (!IsGrounded())
+        {
+            if (transform.position.y > highestYPos)
+            {
+                highestYPos = transform.position.y;
+            }
+
+            float distanceFallen = highestYPos - transform.position.y;
+
+            if (distanceFallen >= fallThreshold && !hasTriggeredFallLog)
+            {
+                Debug.Log("fallen too far");
+                
+                //only display once
+                hasTriggeredFallLog = true; 
+            }
+        }
+        else
+        {
+            // reset
+            highestYPos = transform.position.y;
+            hasTriggeredFallLog = false;
         }
     }
 
