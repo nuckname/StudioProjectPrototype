@@ -106,8 +106,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     //Ground and wall detection
-    private bool IsGrounded() => Physics.CheckSphere(groundCheck.position, 0.2f, groundLayer);
-    private bool IsWalled() => Physics.CheckSphere(wallCheck.position, 0.2f, wallLayer);
+    private bool IsGrounded() => Physics.CheckSphere(groundCheck.position, 0.5f, groundLayer);
+    private bool IsWalled() => Physics.CheckSphere(wallCheck.position, 0.5f, wallLayer);
 
     //Wall logic
     private void WallSlide()
