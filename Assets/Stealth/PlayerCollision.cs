@@ -12,6 +12,8 @@ public class PlayerCollision : MonoBehaviour
     private GameObject pickedUpObject;
     private BoxCollision currentBoxData;
     
+    [SerializeField] private float throwForce = 5f;
+    
     private void Awake()
     {
         playerStealthController = GetComponent<PlayerStealthController>();
@@ -71,6 +73,11 @@ public class PlayerCollision : MonoBehaviour
         if (boxRb != null) 
         {
             boxRb.isKinematic = false; 
+            
+            Vector3 throwDirection = transform.forward + (Vector3.up * 0.5f);
+            
+            boxRb.linearVelocity = throwDirection.normalized * throwForce;
+            
             boxRb.useGravity = true;
         }
 

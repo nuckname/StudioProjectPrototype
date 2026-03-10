@@ -156,7 +156,7 @@ Transform:
   m_GameObject: {fileID: 152894691}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.46538, y: 1.821, z: -8.91596}
+  m_LocalPosition: {x: -0.46538, y: 2.048, z: -8.91596}
   m_LocalScale: {x: 1, y: 2.5771105, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -216,6 +216,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4efa625e96687c4295c32c0f05bffcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCollision
+  playerHand: {fileID: 1647143439}
+  playerHasPickedUpObject: 0
 --- !u!1 &755569143
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,6 +570,7 @@ GameObject:
   - component: {fileID: 1171666061}
   - component: {fileID: 1171666060}
   - component: {fileID: 1171666059}
+  - component: {fileID: 1171666064}
   m_Layer: 0
   m_Name: Cube (4)
   m_TagString: Box
@@ -587,7 +590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90c844b51ce6d234aaa95304e947d198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoxCollision
-  boxWeight: 5
+  boxWeight: 1
 --- !u!65 &1171666060
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -603,7 +606,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -675,12 +678,39 @@ Transform:
   m_GameObject: {fileID: 1171666058}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.79, y: 1.09, z: -9.7}
+  m_LocalPosition: {x: 5.56, y: 1.29, z: -9.7}
   m_LocalScale: {x: 1.1554736, y: 1.084966, z: 1.1639845}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1171666064
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171666058}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1289983392
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,7 +975,7 @@ Transform:
   m_GameObject: {fileID: 1647143438}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.977, y: 0, z: 0}
+  m_LocalPosition: {x: -0.16, y: 0, z: 0.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
