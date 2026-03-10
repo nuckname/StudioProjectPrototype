@@ -62,12 +62,10 @@ public class PhysicsGrabber : MonoBehaviour
                 rb.linearDamping = holdDrag;
                 rb.angularDamping = holdAngularDrag;
 
-                //Spring Joint Getter
-                grabJoint = holdTarget.GetComponent<SpringJoint>();
-
+                grabJoint = holdTarget.AddComponent<SpringJoint>();
+                
                 if (grabJoint == null)
                 {
-                    grabJoint = holdTarget.AddComponent<SpringJoint>();
                     Debug.LogWarning("Component doesnt have sprint joint");
                 }
                 
