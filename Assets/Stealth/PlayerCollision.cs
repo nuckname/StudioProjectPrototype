@@ -56,7 +56,10 @@ public class PlayerCollision : MonoBehaviour
 
         // Snap to hand
         collideBoxObject.transform.SetParent(playerHand);
+        
         collideBoxObject.transform.localPosition = Vector3.zero;
+        
+        //When we pick up an object that is rotated it causes the object to be picked up and freeze at the angle. this line was not the problem.
         collideBoxObject.transform.localRotation = Quaternion.identity;
 
         playerStealthController.moveSpeed -= boxCollision.boxWeight;
