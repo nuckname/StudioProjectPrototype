@@ -1,36 +1,86 @@
 using System;
 using UnityEngine;
 
+// Current breaking single responsibility principle, need to break up into multiple scripts
 public class PlayerCollision : MonoBehaviour
 {
     PlayerStealthController playerStealthController;
 
     [SerializeField] private Transform playerHand; 
     [SerializeField] private bool playerHasPickedUpObject;
-
+    
+    private GameObject pickedUpObject;
+    private BoxCollision currentBoxData;
+    
     private void Awake()
     {
         playerStealthController = GetComponent<PlayerStealthController>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Update()
     {
-        if (other.gameObject.CompareTag("Box") && !playerHasPickedUpObject)
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            BoxCollision box = other.gameObject.GetComponent<BoxCollision>();
-            if (box != null)
+            if (playerHasPickedUpObject && pickedUpObject != null)
             {
-                PickUpObject(other.gameObject, box);
+                DropObject();
             }
         }
     }
 
-    private void PickUpObject(GameObject boxObject, BoxCollision boxData)
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("Box") && !playerHasPickedUpObject)
+        {
+            BoxCollision box = hit.gameObject.GetComponent<BoxCollision>();
+            if (box != null)
+            {
+                PickUpObject(hit.gameObject, box);
+            }
+        }
+    }
+
+    private void PickUpObject(GameObject collideBoxObject, BoxCollision boxCollision)
     {
         playerHasPickedUpObject = true;
+        pickedUpObject = collideBoxObject;
+        currentBoxData = boxCollision; 
 
-        boxObject.transform.SetParent(playerHand);
+        Rigidbody boxRb = pickedUpObject.GetComponent<Rigidbody>();
+        if (boxRb != null) boxRb.isKinematic = true; 
 
-        playerStealthController.moveSpeed -= boxData.boxWeight;
+        Collider boxCollider = pickedUpObject.GetComponent<Collider>();
+        if (boxCollider != null) boxCollider.enabled = false;
+
+        // Snap to hand
+        collideBoxObject.transform.SetParent(playerHand);
+        collideBoxObject.transform.localPosition = Vector3.zero;
+        collideBoxObject.transform.localRotation = Quaternion.identity;
+
+        playerStealthController.moveSpeed -= boxCollision.boxWeight;
+    }
+
+    private void DropObject()
+    {
+        pickedUpObject.transform.SetParent(null);
+
+        BoxCollider boxCollider = pickedUpObject.GetComponent<BoxCollider>();
+        if (boxCollider != null) boxCollider.enabled = true;
+
+        Rigidbody boxRb = pickedUpObject.GetComponent<Rigidbody>();
+        if (boxRb != null) 
+        {
+            boxRb.isKinematic = false; 
+            boxRb.useGravity = true;
+        }
+
+        if (currentBoxData != null)
+        {
+            playerStealthController.moveSpeed += currentBoxData.boxWeight;
+        }
+
+        playerHasPickedUpObject = false;
+        pickedUpObject = null;
+        currentBoxData = null;
     }
 }
