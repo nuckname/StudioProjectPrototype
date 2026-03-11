@@ -52,7 +52,7 @@ public class PlayerCollision : MonoBehaviour
         if (boxRb != null) boxRb.isKinematic = true; 
 
         Collider boxCollider = pickedUpObject.GetComponent<Collider>();
-        if (boxCollider != null) boxCollider.enabled = false;
+        if (boxCollider != null) boxCollider.enabled = true;
 
         // Snap to hand
         collideBoxObject.transform.SetParent(playerHand);
