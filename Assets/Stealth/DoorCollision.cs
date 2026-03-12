@@ -5,11 +5,16 @@ public class DoorCollision : MonoBehaviour
 {
     //use transforms later
     
+    private CharacterController characterController;
     [SerializeField] private Camera playerCamera;
-    [SerializeField] private CharacterController characterController;
     
     [SerializeField] private Vector3 playerTpLocation;
     [SerializeField] private Vector3 cameraTpLocation;
+
+    private void Start()
+    {
+        //characterController = GameObject.FindWithTag("Player").GetComponent<CharacterController>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {

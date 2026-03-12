@@ -1,14 +1,24 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerStealthController : MonoBehaviour
+public class PlayerStealthController : NetworkBehaviour
 {
+    private NetworkVariable<int> randomNumber = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    
     public float moveSpeed = 5f;
     public CharacterController controller;
     
     private Vector3 moveDirection;
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+    }
+
     void Update()
     {
+        if(!IsOwner) return;
+        
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
