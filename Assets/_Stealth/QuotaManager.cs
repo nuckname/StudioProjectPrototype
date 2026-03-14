@@ -4,7 +4,7 @@ public class QuotaManager : MonoBehaviour
 {
     public static QuotaManager Instance { get; private set; }
 
-    public int quotaValue = 0;
+    [SerializeField] private int quotaValue = 0;
     
     private void Awake()
     {

@@ -1,16 +1,15 @@
+using TMPro;
 using UnityEngine;
 
 public class DisplayUi : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private TextMeshProUGUI roundText;
+    [SerializeField] private TextMeshProUGUI quotaText;
 
-    // Update is called once per frame
+    [SerializeField] private UpdateQuota updateQuota;
     void Update()
     {
-        
+        quotaText.text = "Quota: " + updateQuota.totalQuota + " / " + QuotaManager.Instance.GetQuotaValue();
+        roundText.text = "Current Round: " + RoundManager.Instance.ReturnRound(); 
     }
 }

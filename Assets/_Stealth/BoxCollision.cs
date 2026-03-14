@@ -10,7 +10,7 @@ public class BoxCollision : MonoBehaviour
     {
         if (other.CompareTag("DropOffZone"))
         {
-            
+            other.GetComponent<UpdateQuota>().totalQuota += boxWorthAmount;
         }
     }
 }

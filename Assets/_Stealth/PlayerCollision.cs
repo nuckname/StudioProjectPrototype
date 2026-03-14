@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 // Current breaking single responsibility principle, need to break up into multiple scripts
 public class PlayerCollision : MonoBehaviour
@@ -40,12 +41,24 @@ public class PlayerCollision : MonoBehaviour
                 PickUpObject(hit.gameObject, box);
             }
         }
-        
-        if (hit.gameObject.CompareTag("DropOffZone"))
+    }
+    
+    // The cooldown duration in seconds
+    [SerializeField] private float dropOffCooldown = 10f;
+    
+    // Tracks when the player is allowed to use the drop-off again
+    private float nextDropOffTime = 0f;
+    
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("DropOffZone"))
         {
-            if (Input.GetKey(KeyCode.E))
+            //So we cant spam/holddown the key
+            if (Time.time >= nextDropOffTime && Keyboard.current.eKey.wasPressedThisFrame)
             {
                 RoundManager.Instance.NextRound();
+                
+                nextDropOffTime = Time.time + dropOffCooldown;
             }
         }
     }

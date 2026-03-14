@@ -5,7 +5,9 @@ public class RoundManager : MonoBehaviour
     //State Manager is good here
     public static RoundManager Instance { get; private set; }
 
-    private int currentRound = 1;
+    [SerializeField] private UpdateQuota updateQuota;
+    
+    [SerializeField] private int currentRound = 1;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -36,6 +38,7 @@ public class RoundManager : MonoBehaviour
     
     public void NextRound()
     {
+        updateQuota.totalQuota = 0;
         currentRound++;
     }
 }
