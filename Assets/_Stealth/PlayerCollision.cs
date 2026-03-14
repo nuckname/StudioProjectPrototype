@@ -40,6 +40,14 @@ public class PlayerCollision : MonoBehaviour
                 PickUpObject(hit.gameObject, box);
             }
         }
+        
+        if (hit.gameObject.CompareTag("DropOffZone"))
+        {
+            if (Input.GetKey(KeyCode.E))
+            {
+                RoundManager.Instance.NextRound();
+            }
+        }
     }
 
     private void PickUpObject(GameObject collideBoxObject, BoxCollision boxCollision)
